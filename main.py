@@ -1,11 +1,10 @@
-import server
+from sqlite_app_server import AppFile, AppFileServer
 import tools
 
-if __name__ == '__main__':
-    # tools.db_create('test.db')
-    # tools.db_verify('test.db')
 
-    app_server = server.AppFileServer('test.db')
-    app_server.start()
-    input()
-    app_server.stop()
+if __name__ == '__main__':
+    with AppFile('test.db') as db:
+        with open('favicon.ico', 'rb') as favicon:
+            db.file_add('image', 'favicon.ico', favicon.read())
+        app_server = AppFileServer(db)
+        app_server.serve_forever()
